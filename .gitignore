@@ -237,3 +237,6 @@ _Pvt_Extensions
 
 # Webpack generated assets
 Content/bundles
+
+# npm log
+*.log.*
