@@ -14,6 +14,7 @@ var webpackConfig = {
     vendor: [
       // Styles
       'bootstrap/dist/css/bootstrap',
+      'font-awesome/css/font-awesome',
       './src/styles/core',
       // Scripts
       'bootstrap',
