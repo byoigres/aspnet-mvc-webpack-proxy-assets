@@ -74,7 +74,7 @@ All the work it's done within the `Content` directory.
 
 1.- Open Visual Studio project and inmediatly hit `run`.
 
-2.- [Disable `browser link` in case it's enabled](http://stackoverflow.com/a/23140874/1301872).
+2.- [Disable `browser link` in case it's enabled](http://stackoverflow.com/a/23140874/1301872). It's just anoying.
 
 3.- Once the project it's runnig up copy used port from the url.
 
@@ -96,24 +96,43 @@ webpack built a80866ca4b28aeffcbcb in 11635ms
 
 7.- Now open `http://localhost:6789` in the browser and enable the developer tools.
 
-8.- You can see in the dev-tool console this message `[HMR] Waiting for update signal from WDS... [HMR] connected`, that means the Webpack Dev Server it's runnig with the Hot Module Replacement plugin.
+8.- You can see in the dev-tools console this message `[HMR] Waiting for update signal from WDS... [HMR] connected`, that means the Webpack Dev Server it's runnig with the Hot Module Replacement plugin.
 
-At this point you can start modifying the code within `src` folder and `webpack` will handle all the changes to re-generate the bundles. It will also check for errors with the of ESLint and display them on both consoles, and sometimes in your face.
+At this point you can start modifying the code within `src` folder and `webpack` will handle all the changes to re-generate the bundles. It will also check for errors with ESLint and display them on both consoles, and sometimes in your face.
 
 ![LOL](/.images/in-your-face.png)
 
-Most of the times webpack will try to re-generate the bundles without the need of reload the page, if not webpack will let you know it and you just need to press the F5 key...
+Most of the times webpack will try to re-generate the bundles without the need of reload the page, if not, webpack will let you know it and you just need to press the F5 key...
 
 ![Webpack message](/.images/hmr-warning.png)
 
 ## What dependencies are added?
 
-- jquery@2.2.0
-- bootstrap@3.3.6
-- font-awesome@4.5.0
+- [jquery@2.2.0](https://www.npmjs.com/package/jquery)
+- [bootstrap@3.3.6](https://www.npmjs.com/package/bootstrap)
+- [font-awesome@4.5.0](https://www.npmjs.com/package/font-awesome)
 
-Added `$`, `jQuery` and `window.jQuery` simbols ready to use it with modules, but not in the global scope
+Webpack will help to expose the variables like `$`, `jQuery` and `window.jQuery` to use it with modules, but **IT WILL NOT BE IN THE GLOBAL SCOPE**.
+
+```
+...
+plugins: [
+  new webpack.ProvidePlugin({
+    jQuery: 'jquery',
+    $: 'jquery',
+    'window.jQuery': 'jquery'
+  })
+  ...
+]
+...
+```
 
 ## ESLint support
 
+`npm run lint`
+
 ## Vendor chuncks
+
+## Generate bundles ready for production
+
+Yes, you can, simply run `npm run build`.
