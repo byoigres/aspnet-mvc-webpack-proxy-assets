@@ -114,25 +114,82 @@ Most of the times webpack will try to re-generate the bundles without the need o
 
 Webpack will help to expose the variables like `$`, `jQuery` and `window.jQuery` to use it with modules, but **IT WILL NOT BE IN THE GLOBAL SCOPE**.
 
-```
-...
-plugins: [
-  new webpack.ProvidePlugin({
-    jQuery: 'jquery',
-    $: 'jquery',
-    'window.jQuery': 'jquery'
-  })
-  ...
-]
-...
+```javascript
+{
+  plugins: [
+    new webpack.ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      'window.jQuery': 'jquery'
+    })
+  ]
+}
 ```
 
 ## ESLint support
 
-`npm run lint`
+[ESLint](eslint.org) it's configured with the [`airbnb`](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb) preset and sets `$` and `jQuery` variables as globals.
+
+```json
+{
+  "extends": "airbnb",
+  "globals": {
+    "$": true,
+    "jQuery": true
+  }
+}
+```
+
+The code review runs everytime you save a file, so it will display information in the browser and both consoles if something weird happened with your code.
+
+You can run the linter manually with the following command `npm run lint`.
 
 ## Vendor chuncks
 
+All the third party dependencies will be bundled in one big (not so much) `vendor.js` file thanks to the `Commons Chunk` plugin.
+
+```javascript
+{
+    new webpack.optimize.CommonsChunkPlugin(
+      'vendor', '[name].js'
+    )
+  ]
+}
+```
+
+All the remained entries will be bundled according to the `output.filename` section of the `webpack.config.js` file.
+
 ## Generate bundles ready for production
 
-Yes, you can, simply run `npm run build`.
+Yes, you can, simply run `npm run build` and a `bundles` folder will apear with all the chuncks, _JavaScript files_, _CSS stylesheets_, _woff_, _ttf_, _svg_ and _eot_ fonts with _cool random names_ and more!
+
+JavaScript and CSS files will have a source map file, they will be uglifyied and all the `debug` and `console.log` instructions will be removed.
+
+## Stripping unwanted code
+
+Thanks to [Yahoo!](https://github.com/yahoo) for this simple but amazing loader: [`strip-loader`](https://github.com/yahoo/strip-loader). With it we can exclude unwanted functions like `debug` or `console.log`, I know, ESLint could warn us, but in case we forgot to remove someones here is how we can just drop out of our code.
+
+### A little note about `strip-loader`
+
+Beware of functions like this: `$('#learn-more').click(() => console.log('http://asp.net'));`, the console instruction it will not be removed, webpack is so smart that it will be transpile the code like this:
+
+```javascript
+$("#learn-more").click(function(){return console.log("http://asp.net")});
+//# sourceMappingURL=home.js.map
+```
+
+But if instead you use the code as follows
+
+```javascript
+$('#learn-more').click(() => {
+  console.log('http://asp.net');
+  window.open('http://asp.net', '_blank');
+});
+```
+
+`strip-loader` will remove the `console.log`;
+
+```javascript
+$("#learn-more").click(function(){window.open("http://asp.net","_blank")});
+//# sourceMappingURL=home.js.map
+```
