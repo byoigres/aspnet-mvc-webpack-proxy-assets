@@ -1,4 +1,4 @@
-# ASP.NET MVC + Webpack + Hapi + SASS + React + HMR
+# ASP.NET MVC + Webpack + Hapi + SASS + HMR
 
 > You MUST to know the basis about Webpack, ES6 and ESLint to use this project or
 you can clone it and follow this README to start learning about it.
