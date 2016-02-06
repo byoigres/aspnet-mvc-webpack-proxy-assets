@@ -112,7 +112,7 @@ Most of the times webpack will try to re-generate the bundles without the need o
 - [bootstrap@3.3.6](https://www.npmjs.com/package/bootstrap)
 - [font-awesome@4.5.0](https://www.npmjs.com/package/font-awesome)
 
-Webpack will help to expose the variables like `$`, `jQuery` and `window.jQuery` to use it with modules, but **IT WILL NOT BE IN THE GLOBAL SCOPE**.
+Webpack will help you to expose global variables like `$`, `jQuery` and `window.jQuery` to use it with modules, but **THEY WILL NOT BE IN THE GLOBAL SCOPE**.
 
 ```javascript
 {
@@ -153,7 +153,6 @@ All the third party dependencies will be bundled in one big (not so much) `vendo
     new webpack.optimize.CommonsChunkPlugin(
       'vendor', '[name].js'
     )
-  ]
 }
 ```
 
@@ -161,9 +160,9 @@ All the remained entries will be bundled according to the `output.filename` sect
 
 ## Generate bundles ready for production
 
-Yes, you can, simply run `npm run build` and a `bundles` folder will apear with all the chuncks, _JavaScript files_, _CSS stylesheets_, _woff_, _ttf_, _svg_ and _eot_ fonts with _cool random names_ and more!
+Yes, you can, simply run `npm run build` and the `bundles` folder will apear with all the chuncks, _JavaScript files_, _CSS stylesheets_, _woff_, _ttf_, _svg_ and _eot_ fonts with _cool random names_ and more!
 
-JavaScript and CSS files will have a source map file, they will be uglifyied and all the `debug` and `console.log` instructions will be removed.
+JavaScript and CSS files will have a source map file, they will be uglifyied and all the `debug` and `console.log` functions will be removed.
 
 ## Stripping unwanted code
 
@@ -171,11 +170,10 @@ Thanks to [Yahoo!](https://github.com/yahoo) for this simple but amazing loader:
 
 ### A little note about `strip-loader`
 
-Beware of functions like this: `$('#learn-more').click(() => console.log('http://asp.net'));`, the console instruction it will not be removed, webpack is so smart that it will be transpile the code like this:
+Beware of functions like this: `$('#learn-more').click(() => console.log('http://asp.net'));`, the console function it will not be removed, webpack is so smart that it will be transpile the code like this:
 
 ```javascript
 $("#learn-more").click(function(){return console.log("http://asp.net")});
-//# sourceMappingURL=home.js.map
 ```
 
 But if instead you use the code as follows
@@ -191,5 +189,4 @@ $('#learn-more').click(() => {
 
 ```javascript
 $("#learn-more").click(function(){window.open("http://asp.net","_blank")});
-//# sourceMappingURL=home.js.map
 ```
